@@ -1,0 +1,13 @@
+This is simple project aimed to create "build indicator" using Python and Arduino.
+
+Build indicator in this case is two RGB LEDs which are controlled by Arduino sketch, which 
+in turn is controlled by python script from host PC. 
+
+Indicator can show three states:
+ - build successful - both LEDs are shining green
+ - build in progress - LEDs are smoothly fading in and out yellow
+ - build failed - LEDs are flashing red and blue like police strobes
+
+ Actually whole stuff is intended to be mounted on a model car with diodes acting as beacons.
+
+
