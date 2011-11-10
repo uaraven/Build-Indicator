@@ -135,13 +135,13 @@ void setup()
   /*
   led1.set_color(100, 0, 0);
   led2.set_color(0, 100, 0);
-  delay(25);
+  delay(250);
   led1.set_color(0, 0, 100);
   led2.set_color(100, 0, 0);
-  delay(25);
+  delay(250);
   led1.set_color(0, 100, 0);
   led2.set_color(0, 0, 100);
-  delay(25);*/
+  delay(250);*/
   led1.off();
   led2.off();
   current_mode = mode_wait;
@@ -309,8 +309,6 @@ void loop()
     case mode_failed:
       display_fail();
       break;
-//    default:
-//      display_wait();
   }
   int in = Serial.read();
   if (in >= 0) 
@@ -322,7 +320,6 @@ void loop()
       case '1': next_mode = mode_in_progress; break;
       case '2': next_mode = mode_failed; break;
       case '3': next_mode = mode_wait;break;
-//      default: next_mode = 0; 
     }
   }
 }
