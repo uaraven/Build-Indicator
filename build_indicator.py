@@ -16,17 +16,17 @@ def main():
 	    
 	args = parser.parse_args()
 	cmd = cmd_index[args.command[0]]
-	port = args.port
-	ser = serial.Serial(port, 9600)
-	ser.setDTR(False)
+	ser = serial.Serial(PORT_NAME, 9600, timeout = 0)
 	rd = ''
 	print 'Waiting for board'
 	while (rd != 'r'):
 		rd = ser.read(size = 1)
-	ser.write(cmd)
-	ser.flush()
-	ser.close()
-	print 'Sent',cmd
+	rd = ''
+	ser.timeout = 0.5
+	while (rd != 'r'):
+	    ser.write(cmd)
+            rd = ser.read(size = 1)
+
 
 if __name__ == "__main__":
 	main()
