@@ -16,7 +16,7 @@ def main():
 	    
 	args = parser.parse_args()
 	cmd = cmd_index[args.command[0]]
-	ser = serial.Serial(PORT_NAME, 9600, timeout = 0)
+	ser = serial.Serial(args.port, 9600, timeout = 0)
 	rd = ''
 	print 'Waiting for board'
 	while (rd != 'r'):
