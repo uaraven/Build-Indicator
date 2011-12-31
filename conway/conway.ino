@@ -1,11 +1,5 @@
 /*
  * Game Of Life on 8x8 double-colored LED matrix
- * Could be used as build indicator for CI
- * Accepts commands via serial port:
- *  '0' - Game of life in red color
- *  '1' - Game of life in green color
- *  '2' - Happy face in green color
- *  '3' - Sad face in red color
  */
 const int dataPin = 2;
 const int clockPin = 3; //12;
@@ -45,7 +39,7 @@ void drawField(int color) {
     digitalWrite(rlatch, LOW);
     shiftOut(rdata, rclock, MSBFIRST, ~row);
     digitalWrite(rlatch, HIGH);    
-    delayMicroseconds(1250);
+//    delayMicroseconds(1000);
   }
 }
 
@@ -67,6 +61,17 @@ void sadFace() {
   field[3] = 0b10000001;  
   field[4] = 0b10011001;
   field[5] = 0b10100101;
+  field[6] = 0b01000010;
+  field[7] = 0b00111100;  
+}
+
+void indifferentFace() {
+  field[0] = 0b00111100;
+  field[1] = 0b01000010;
+  field[2] = 0b10100101;
+  field[3] = 0b10000001;  
+  field[4] = 0b10000001;
+  field[5] = 0b10111101;
   field[6] = 0b01000010;
   field[7] = 0b00111100;  
 }
@@ -113,8 +118,10 @@ int numberOfNeighbours(byte* field, int x, int y) {
 int stuckGenerations = 0;
 int population = 0;
 
+const int MAX_STUCK = 5;
+
 void gameOfLife() {
-  if (stuckGenerations > 3) {
+  if (stuckGenerations > MAX_STUCK) {
     stuckGenerations = 0;
     randomizeField();
     return;
@@ -182,6 +189,7 @@ void setup() {
 const int GAME_OF_LIFE = 0;
 const int SMILE_HAPPY = 1;
 const int SMILE_SAD = 2;
+const int SMILE_INDIFFERENT = 3;
 
 int color = 1;
 int mode = GAME_OF_LIFE;
@@ -202,6 +210,9 @@ void loop() {
     } else if (command == 0x33) {
       color = 0;
       mode = SMILE_SAD;
+    } else {
+      color = 0;
+      mode = SMILE_INDIFFERENT;
     }
   }
   
@@ -214,7 +225,9 @@ void loop() {
       happyFace();
     } else if (mode == SMILE_SAD) {
       sadFace();
-    }    
+    } else if (mode == SMILE_INDIFFERENT) {
+      indifferentFace();
+    }
   }
   
   drawField(color);
