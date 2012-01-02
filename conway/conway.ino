@@ -9,6 +9,8 @@ const int rdata = 8;
 const int rclock = 9;
 const int rlatch = 10;
 
+const int clicker = 5;
+
 const int RED = 0;
 const int GREEN = 1;
 
@@ -75,6 +77,27 @@ void indifferentFace() {
   field[6] = 0b01000010;
   field[7] = 0b00111100;  
 }
+
+void play_red_sound() {
+  for (int i = 0; i < 3; i++) 
+  {
+    analogWrite(clicker, 200);
+    delay(50);
+    analogWrite(clicker, 0);
+    delay(150);
+  }
+}
+
+void play_green_sound() {
+  analogWrite(clicker, 20);
+  delay(50);
+  analogWrite(clicker, 0);
+  delay(150);
+  analogWrite(clicker, 30);
+  delay(30);
+  analogWrite(clicker, 0);
+}
+
 
 // ------------ Game of Life --------------------
 int clamp(int v) {
@@ -179,6 +202,8 @@ void setup() {
   pinMode(rclock, OUTPUT);
   pinMode(rlatch, OUTPUT);
   
+  pinMode(clicker, OUTPUT);
+  
   Serial.begin(9600);
   digitalWrite(13, HIGH);
   
@@ -199,19 +224,21 @@ void loop() {
   {
     int command = Serial.read();
     if (command == 0x30) {
-      color = 0;
+      color = RED;
       mode = GAME_OF_LIFE;
+      play_red_sound();
     } else if (command == 0x31) {
-      color = 1;
+      color = GREEN;
       mode = GAME_OF_LIFE;
+      play_green_sound();      
     } else if (command == 0x32) {
-      color = 1;
+      color = GREEN;
       mode = SMILE_HAPPY;
     } else if (command == 0x33) {
-      color = 0;
+      color = RED;
       mode = SMILE_SAD;
     } else {
-      color = 0;
+      color = RED;
       mode = SMILE_INDIFFERENT;
     }
   }
